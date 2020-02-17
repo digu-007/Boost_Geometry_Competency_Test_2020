@@ -7,9 +7,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// Program to find convex hull of n points using jarvis march or gift wrapping algorithm.
+// Program to find convex hull of n, 2 dimensional points using jarvis march or gift wrapping algorithm.
 // Convex hull of a shape is the smallest convex set that contains it.
-
 struct pnt{
     double x, y;
 };
