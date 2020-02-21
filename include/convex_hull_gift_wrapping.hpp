@@ -4,7 +4,10 @@
     NIT Hamirpur - INDIA
 */
 
+#include <algorithm>
 #include <iostream>
+#include <iterator>
+#include <utility>
 
 #include <boost/geometry/geometry.hpp>
 
@@ -46,8 +49,8 @@ void Hull<MultiPoint, Size>::print_hull()
 template <typename Point>
 inline bool check(Point a, Point b, Point c)
 {
-    double value = (bg::get<0>(b) - bg::get<0>(a)) * (bg::get<1>(c) - bg::get<1>(a))
-                   - (bg::get<1>(b) - bg::get<1>(a)) * (bg::get<0>(c) - bg::get<0>(a));
+    double value = (bg::get<1>(b) - bg::get<1>(a)) * (bg::get<0>(c) - bg::get<0>(b))
+                   - (bg::get<0>(b) - bg::get<0>(a)) * (bg::get<1>(c) - bg::get<1>(b));
 
     return (value < 0);
 }
@@ -59,17 +62,21 @@ inline MultiPoint GiftWrapping(MultiPoint input)
     MultiPoint hull;
 
     int n = boost::size(input);
-    int leftmost = 0;
-    for (int i = 1; i < n; ++i)
-    {
-        if (bg::get<0>(input[i]) < bg::get<0>(input[leftmost]))
-        {
-            leftmost = i;
-        }
-    }
 
-    // Algorithm starts from leftmost point
-    int p = leftmost;
+    typedef typename bg::point_type<MultiPoint>::type point_type;
+
+    // Sorts input in increasing order of x values and in case of ties, increasing y values
+    sort(input.begin(), input.end(), [&](point_type a, point_type b)
+    {
+        if (bg::get<0>(a) == bg::get<0>(b))
+        {
+            return (bg::get<1>(a) < bg::get<1>(b));
+        }
+        return (bg::get<0>(a) < bg::get<0>(b));
+    });
+
+    // Algorithm starts from leftmost point, which is the first point in input
+    int p = 0;
     int q = 0;
     while (true)
     {
@@ -82,7 +89,7 @@ inline MultiPoint GiftWrapping(MultiPoint input)
                 q = i;
             }
         }
-        if (q == leftmost)
+        if (q == 0)
         {
             bg::append(hull, input[q]);
             break;

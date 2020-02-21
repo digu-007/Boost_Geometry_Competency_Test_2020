@@ -9,26 +9,28 @@ using namespace std;
 
 // Program to find convex hull of n, 2 dimensional points using jarvis march or gift wrapping algorithm.
 // Convex hull of a shape is the smallest convex set that contains it.
+
 struct pnt{
     double x, y;
 };
 
 bool cross_product(pnt a, pnt b, pnt c) {
     // return true if points are oriented in counter-clockwise manner
-    return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x) < 0);
+    return ((b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y) < 0);
 }
 
-vector<pnt> wrapping_jarvis(vector<pnt> pt) {
+vector<pnt> wrapping_gift(vector<pnt> pt) {
     // computes convex hull in O(n * h)
     // where, n is the total input points and h is the total points in convex hull
     vector<pnt> hull;
-    int leftmost = 0, n = pt.size();
-    for (int i = 1; i < n; ++i) {
-        if (pt[i].x < pt[leftmost].x) {
-            leftmost = i;
+    int n = pt.size();
+    sort(pt.begin(), pt.end(), [&](pnt a, pnt b) {
+        if (a.x == b.x) {
+            return (a.y < b.y);
         }
-    }
-    int p = leftmost, q = 0;
+        return (a.x < b.x);
+    });
+    int p = 0, q = 0;
     while (true) {
         hull.push_back(pt[p]);
         q = (p + 1) % n;
@@ -37,7 +39,8 @@ vector<pnt> wrapping_jarvis(vector<pnt> pt) {
                 q = i;
             }
         }
-        if (q == leftmost) {
+        if (q == 0) {
+            hull.push_back(pt[q]);
             break;
         }
         p = q;
@@ -46,7 +49,7 @@ vector<pnt> wrapping_jarvis(vector<pnt> pt) {
 }
 
 int main() {
-    cout << fixed << setprecision(2);
+    cout << fixed << setprecision(1);
     int n;
     cin >> n;
     assert(n > 2); // at least three points are required for convex hull
@@ -56,7 +59,7 @@ int main() {
         cin >> a >> b;
         pt.push_back({a, b});
     }
-    vector<pnt> hull = wrapping_jarvis(pt);
+    vector<pnt> hull = wrapping_gift(pt);
     for (int i = 0; i < int(hull.size()); ++i) {
         cout << hull[i].x << " " << hull[i].y << "\n";
     }
