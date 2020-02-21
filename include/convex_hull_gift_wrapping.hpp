@@ -39,7 +39,7 @@ template <typename MultiPoint, typename Size>
 void Hull<MultiPoint, Size>::print_hull()
 {
     std::cout << "Resulting points of Convex Hull are: " << std::endl;
-    for (int i = 0; i < n; ++i)
+    for (Size i = 0; i < n; ++i)
     {
         std::cout << bg::get<0>(hull[i]) << " " << bg::get<1>(hull[i]) << std::endl;
     }
@@ -47,9 +47,11 @@ void Hull<MultiPoint, Size>::print_hull()
 
 // This method returns true if the points are oriented in counter-clockwise manner
 template <typename Point>
-inline bool check(Point a, Point b, Point c)
-{
-    double value = (bg::get<1>(b) - bg::get<1>(a)) * (bg::get<0>(c) - bg::get<0>(b))
+static inline bool check(Point a, Point b, Point c)
+{   
+    typedef typename bg::coordinate_type<Point>::type c_type;
+
+    c_type value = (bg::get<1>(b) - bg::get<1>(a)) * (bg::get<0>(c) - bg::get<0>(b))
                    - (bg::get<0>(b) - bg::get<0>(a)) * (bg::get<1>(c) - bg::get<1>(b));
 
     return (value < 0);
@@ -61,12 +63,13 @@ inline MultiPoint GiftWrapping(MultiPoint input)
 {
     MultiPoint hull;
 
-    int n = boost::size(input);
-
     typedef typename bg::point_type<MultiPoint>::type point_type;
+    typedef typename boost::range_size<MultiPoint>::type size_type;
+
+    size_type n = boost::size(input);
 
     // Sorts input in increasing order of x values and in case of ties, increasing y values
-    sort(input.begin(), input.end(), [&](point_type a, point_type b)
+    std::sort(boost::begin(input), boost::end(input), [&](point_type a, point_type b)
     {
         if (bg::get<0>(a) == bg::get<0>(b))
         {
@@ -76,13 +79,13 @@ inline MultiPoint GiftWrapping(MultiPoint input)
     });
 
     // Algorithm starts from leftmost point, which is the first point in input
-    int p = 0;
-    int q = 0;
+    size_type p = 0;
+    size_type q = 0;
     while (true)
     {
         bg::append(hull, input[p]);
         q = (p + 1) % n;
-        for (int i = 0; i < n; ++i)
+        for (size_type i = 0; i < n; ++i)
         {
             if (check(input[p], input[i], input[q]))
             {
@@ -99,8 +102,8 @@ inline MultiPoint GiftWrapping(MultiPoint input)
     }
 
     // Uncomment lines below to print the current convex hull
-    // int h = boost::size(hull);
-    // Hull<MultiPoint, int> debug(hull, h);
+    // size_type h = boost::size(hull);
+    // Hull<MultiPoint, size_type> debug(hull, h);
     // debug.print_hull();
     
     return hull;
