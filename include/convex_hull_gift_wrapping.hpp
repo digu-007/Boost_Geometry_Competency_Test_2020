@@ -13,7 +13,7 @@
 
 namespace bg = boost::geometry;
 
-// Solves 2D convex hull in O(n * h)
+// Solves 2D convex hull in O(n * h) complexity for Multipoint concept
 // Where n is the total input points and h is the total points in convex hull
 template <typename MultiPoint, typename Size>
 class Hull {
@@ -57,26 +57,27 @@ static inline bool check(Point a, Point b, Point c)
     return (value < 0);
 }
 
+// Sorts input in increasing order of x values and in case of ties, increasing y values
+template <typename Range>
+static inline void sort(Range& range)
+{
+    typedef typename boost::range_value<Range>::type point_type;
+    typedef boost::geometry::less<point_type> comparator;
+
+    std::sort(boost::begin(range), boost::end(range), comparator());
+}
+
 // Driver code
 template <typename MultiPoint>
 inline MultiPoint GiftWrapping(MultiPoint input)
 {
     MultiPoint hull;
 
-    typedef typename bg::point_type<MultiPoint>::type point_type;
     typedef typename boost::range_size<MultiPoint>::type size_type;
 
     size_type n = boost::size(input);
 
-    // Sorts input in increasing order of x values and in case of ties, increasing y values
-    std::sort(boost::begin(input), boost::end(input), [&](point_type a, point_type b)
-    {
-        if (bg::get<0>(a) == bg::get<0>(b))
-        {
-            return (bg::get<1>(a) < bg::get<1>(b));
-        }
-        return (bg::get<0>(a) < bg::get<0>(b));
-    });
+    sort(input);
 
     // Algorithm starts from leftmost point, which is the first point in input
     size_type p = 0;
