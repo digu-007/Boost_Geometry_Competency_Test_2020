@@ -16,19 +16,19 @@ namespace bg = boost::geometry;
 // Solves 2D convex hull in O(n * h) complexity for Multipoint concept
 // Where n is the total input points and h is the total points in convex hull
 template <typename MultiPoint, typename Size>
-class Hull {
+class ConvexHull {
 
     private:
         MultiPoint hull;
         Size n;
 
     public:
-        Hull(MultiPoint mp, Size sz);
+        ConvexHull(MultiPoint mp, Size sz);
         void print_hull();
 };
 
 template <typename MultiPoint, typename Size>
-Hull<MultiPoint, Size>::Hull(MultiPoint mp, Size sz)
+ConvexHull<MultiPoint, Size>::ConvexHull(MultiPoint mp, Size sz)
 {
     hull = mp;
     n = sz;
@@ -36,7 +36,7 @@ Hull<MultiPoint, Size>::Hull(MultiPoint mp, Size sz)
 
 // To print the convex hull
 template <typename MultiPoint, typename Size>
-void Hull<MultiPoint, Size>::print_hull()
+void ConvexHull<MultiPoint, Size>::print_hull()
 {
     std::cout << "Resulting points of Convex Hull are: " << std::endl;
     for (Size i = 0; i < n; ++i)
@@ -69,10 +69,8 @@ static inline void sort(Range& range)
 
 // Driver code
 template <typename MultiPoint>
-inline MultiPoint GiftWrapping(MultiPoint input)
+inline void GiftWrapping(MultiPoint input, MultiPoint& hull)
 {
-    MultiPoint hull;
-
     typedef typename boost::range_size<MultiPoint>::type size_type;
 
     size_type n = boost::size(input);
@@ -96,16 +94,14 @@ inline MultiPoint GiftWrapping(MultiPoint input)
         if (q == 0)
         {
             bg::append(hull, input[q]);
-            break;
             // Ends when counter reaches leftmost point again
+            break;
         }
         p = q;
     }
 
     // Uncomment lines below to print the current convex hull
     // size_type h = boost::size(hull);
-    // Hull<MultiPoint, size_type> debug(hull, h);
+    // ConvexHull<MultiPoint, size_type> debug(hull, h);
     // debug.print_hull();
-    
-    return hull;
 }
