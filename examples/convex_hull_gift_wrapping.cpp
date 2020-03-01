@@ -23,7 +23,7 @@ int main()
     mpoint_t mpt1, hull;
     bg::read_wkt("MULTIPOINT(0 0,6 0,2 2,4 2,5 3,5 5,-2 2)", mpt1);
 
-    GiftWrapping(mpt1, hull);
+    algo1::GiftWrapping(mpt1, hull);
 
     std::cout << "Dataset: " << dsv(mpt1) << std::endl;
     std::cout << "Convex hull: " << dsv(hull) << std::endl;

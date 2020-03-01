@@ -16,6 +16,8 @@
 namespace bg = boost::geometry;
 namespace bgi = boost::geometry::index;
 
+namespace algo2
+{
 // Solves 2D concave hull in O(n ^ 3) complexity for Multipoint concept
 // Where n is the total input points
 template <typename MultiPoint, typename Size, typename Factor>
@@ -302,3 +304,5 @@ inline void ConcaveHullKNN(MultiPoint input, MultiPoint& hull, Factor k)
     // ConcaveHull<MultiPoint, size_type, Factor> debug(hull, h, k);
     // debug.print_hull();
 }
+
+} //namespace algo2

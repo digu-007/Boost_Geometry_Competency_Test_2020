@@ -24,7 +24,7 @@ int main()
     bg::read_wkt("MULTIPOINT(0 0,6 0,3 1,3 2,4 2,5 3,5 5,4 4,-2 2)", mpt1);
 
     int k = 3;
-    ConcaveHullKNN(mpt1, hull, k);
+    algo3::ConcaveHullKNN(mpt1, hull, k);
 
     std::cout << "Dataset: " << dsv(mpt1) << std::endl;
     std::cout << "Concave hull for k = " << k << ": " << dsv(hull) << std::endl;
