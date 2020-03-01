@@ -13,6 +13,8 @@
 
 namespace bg = boost::geometry;
 
+namespace algo1
+{
 // Solves 2D convex hull in O(n * h) complexity for Multipoint concept
 // Where n is the total input points and h is the total points in convex hull
 template <typename MultiPoint, typename Size>
@@ -105,3 +107,5 @@ inline void GiftWrapping(MultiPoint input, MultiPoint& hull)
     // ConvexHull<MultiPoint, size_type> debug(hull, h);
     // debug.print_hull();
 }
+
+} // namespace algo1
