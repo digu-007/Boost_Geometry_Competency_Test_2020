@@ -8,7 +8,7 @@
 #include <iostream>
 #include <utility>
 
-#include "../include/convex_hull_gift_wrapping.hpp"
+#include "../../includes/convex_hull_gift_wrapping.hpp"
 
 #include <boost/geometry/geometry.hpp>
 
