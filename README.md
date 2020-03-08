@@ -1,7 +1,7 @@
 # Gift Wrapping Convex Hull and Concave Hull using k-Nearest Neighbours
 
 ## Note
-This programming competency test is for Project 1, implement algorithms for the concave hull problem. My solution work for competency test is in the `/includes` directory, where `convex_hull_gift_wrapping.hpp` is the solution to what is specified in [wiki page](https://github.com/boostorg/wiki/wiki/Google-Summer-of-Code%3A-2020) and `concave_hull_k_nearest_neighbours_optimized.hpp` is the solution that matches my project idea (as discussed with the mentor earlier).
+This programming competency test is for Project 1, implement algorithms for the concave hull problem. My solution work for competency test is in the `/includes` directory, where `convex_hull_gift_wrapping.hpp` is the solution to what is specified in [wiki page](https://github.com/boostorg/wiki/wiki/Google-Summer-of-Code%3A-2020) and `concave_hull_k_nearest_neighbours_optimized.hpp` is the solution that matches my project idea (as discussed with the mentors earlier).
 
 ## How to use?
 1. Clone / Download the repository.
@@ -20,6 +20,8 @@ For 100000 random points, execution time was about `752ms`.
 For 50000 random points, execution time was about `359ms`.
 
 For 10000 random points, execution time was about `63ms`.
+
+Tests were carried out in Ubuntu 18.04.1, with gcc version 7.4.0 and optimization level `O2`.
 
 ## Concave Hull using k-Nearest Neighbours
 Since my project is related to concave hull so I implemented a concave hull algorithm using template metaprogramming supporting Boost Geometry's MultiPoint concept for this test. k-Nearest Neighbours approach for finding concave hull uses k nearest points from the current point to find the next vertex of the concave hull. This method is kind of similar to gift wrapping, but there we have value of k = total number of points in the current dataset and there exists no special cases in that. Here we tackle two special cases.
@@ -52,7 +54,7 @@ Here is another example showing convex hull for `154` points in the shape of let
 ![k = 11](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-11.png)
 ![k = 2](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-2.png)
 
-As we can see as the k decreases concave hull becomes sharper and sharper. When k is equal to total points, then we get convex hull as the concave hull solution.
+As we can see if the k decreases concave hull becomes more 'sharper'. When k is equal to total points, then we get convex hull as the concave hull solution.
 
 ### Performance
 
@@ -62,4 +64,4 @@ For 100 random points and `k = 3`, execution time was about `1122ms` for optimiz
 
 For 100 random points and `k = 12`, execution time was about `58ms` for optimized version and `145ms` for basic version. Here k was incremented to `k = 15` for valid concave hull.
 
-As we can see this algorithm is simple but not that efficient for real use. For that I will be also implementing the `χ-shape` concave hull algorithm in the GSoC period, if my proposal gets accepted.
+As we can see this algorithm is simple but not that efficient for real use. For that I will also implement the `χ-shape` concave hull algorithm in the GSoC period, if my proposal gets accepted.
