@@ -37,10 +37,17 @@ Here is an example showing convex hull for `42` points in the shape of letter `L
 
 ![k = 42](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/L-42.png)
 ![k = 20](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/L-20.png)
+
 ![k = 11](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/L-11.png)
 ![k = 3](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/L-3.png)
 
-Here is another example showing convex hull for `154` points in the shape of letter `S`, followed by concave hull of the same dataset for `k = 20`, `k = 11` and `k = 3`.
+Here is another example showing convex hull for `154` points in the shape of letter `S`, followed by concave hull of the same dataset for `k = 20`, `k = 11` and `k = 2`.
+
+![k = 154](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-154.png)
+![k = 20](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-20.png)
+
+![k = 11](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-11.png)
+![k = 2](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-2.png)
 
 ### Performance
 
