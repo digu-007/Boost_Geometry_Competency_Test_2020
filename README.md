@@ -1,5 +1,8 @@
 # Gift Wrapping Convex Hull and Concave Hull using k-Nearest Neighbours
 
+## Note
+This programming competency test is for Project 1, implement algorithms for the concave hull problem. My solution work for competency test is in the `/includes` directory, where `convex_hull_gift_wrapping.hpp` is the solution to what is specified in [wiki page](https://github.com/boostorg/wiki/wiki/Google-Summer-of-Code%3A-2020) and `concave_hull_k_nearest_neighbours_optimized.hpp` is the solution that matches my project idea (as discussed with the mentor earlier).
+
 ## How to use?
 1. Clone / Download the repository.
 2. Add the header of the file you want to use in your cpp file, by specifying the file address this way: 
@@ -49,6 +52,8 @@ Here is another example showing convex hull for `154` points in the shape of let
 ![k = 11](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-11.png)
 ![k = 2](https://github.com/digu-007/Boost_Geometry_Competency_Test_2020/blob/develop/images/S-2.png)
 
+As we can see as the k decreases concave hull becomes sharper and sharper. When k is equal to total points, then we get convex hull as the concave hull solution.
+
 ### Performance
 
 For 200 random points and `k = 3`, execution time was about `221ms` for optimized version and `501ms` for basic version. Here k was incremented to `k = 14` for valid concave hull.
@@ -57,4 +62,4 @@ For 100 random points and `k = 3`, execution time was about `1122ms` for optimiz
 
 For 100 random points and `k = 12`, execution time was about `58ms` for optimized version and `145ms` for basic version. Here k was incremented to `k = 15` for valid concave hull.
 
-As we can see this algorithm is simple but not that efficient for real use. For that I will be implementing the `χ-shape` concave hull algorithm in the GSoC period, if my proposal gets accepted.
+As we can see this algorithm is simple but not that efficient for real use. For that I will be also implementing the `χ-shape` concave hull algorithm in the GSoC period, if my proposal gets accepted.
