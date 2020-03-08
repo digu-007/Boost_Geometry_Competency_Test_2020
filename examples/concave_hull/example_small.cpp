@@ -8,7 +8,7 @@
 #include <iostream>
 #include <utility>
 
-#include "../include/concave_hull_k_nearest_neighbours_optimized.hpp"
+#include "../../includes/concave_hull_k_nearest_neighbours_optimized.hpp"
 
 #include <boost/geometry/geometry.hpp>
 
