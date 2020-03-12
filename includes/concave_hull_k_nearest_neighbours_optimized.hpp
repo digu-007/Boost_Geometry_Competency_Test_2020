@@ -194,7 +194,7 @@ static inline MultiPoint Solve(MultiPoint dataset, Factor k)
             bool ok = true;
             linestring_type ls1{k_nearest[i], cur_point};
 
-            // querying RTree to find all the intersecting edges of the hull with the current edge
+            // // querying RTree to find all the intersecting edges of the hull with the current edge
             std::vector<segment_type> bad;
             segment_type seg(k_nearest[i], cur_point);
             rt2.query(bgi::intersects(seg), std::back_inserter(bad));
@@ -240,9 +240,14 @@ static inline MultiPoint Solve(MultiPoint dataset, Factor k)
                 best = good[i];
             }
         }
+        if (step)
+        {   
+            // adding previously formed edge to RTree
+            size_type last = boost::size(ans) - 2;
+            segment_type cur_segment(cur_point, ans[last]);
+            bgi::insert(rt2, cur_segment);
+        }
         cur_point = best;
-        segment_type cur_segment(cur_point, ans.back());
-        bgi::insert(rt2, cur_segment);
         bg::append(ans, cur_point);
         RemovePoint(dataset, cur_point);
         bgi::remove(rt1, cur_point);
@@ -274,7 +279,7 @@ static inline MultiPoint Solve(MultiPoint dataset, Factor k)
 
 // Driver code
 template <typename MultiPoint, typename Factor>
-inline void ConcaveHullKNN(MultiPoint input, MultiPoint& hull, Factor k)
+inline void ConcaveHullKNN(MultiPoint input, MultiPoint& hull, Factor& k)
 {
     typedef typename boost::range_size<MultiPoint>::type size_type;
 
