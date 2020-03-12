@@ -187,28 +187,34 @@ static inline MultiPoint Solve(MultiPoint dataset, Factor k)
         rt1.query(bgi::nearest(cur_point, cur_k), std::back_inserter(k_nearest));
         
         size_type size1 = boost::size(k_nearest);
-        // size_type size2 = boost::size(ans);
         std::vector<point_type> good;
         for (size_type i = 0; i < size1; ++i)
         {   
             bool ok = true;
             linestring_type ls1{k_nearest[i], cur_point};
 
-            // // querying RTree to find all the intersecting edges of the hull with the current edge
+            // querying RTree to find all the intersecting edges of the hull with the current edge
             std::vector<segment_type> bad;
             segment_type seg(k_nearest[i], cur_point);
             rt2.query(bgi::intersects(seg), std::back_inserter(bad));
+
             size_type size2 = boost::size(bad);
-            for (size_type j = 0; j < size2; ++j)
-            {
-                linestring_type ls2{bad[j].first, bad[j].second};
+            if (size2 == 1 and bg::equals(k_nearest[i], ans[0]))
+            {   
+                // if linestring touches first edge, then its the last edge and is ok
+                linestring_type ls2{ans[0], ans[1]};
                 if (!bg::touches(ls1, ls2))
-                {
-                    // edge should intersect and not touch the other edge to become a bad edge
+                {   
+                    // if this linestring does not touch and only intersect then discard this point
                     ok = false;
-                    break;
                 }
             }
+            else if (size2 > 0)
+            {   
+                // interesections means point is discarded
+                ok = false;
+            }
+
             if (ok)
             {   
                 // non intersecting edge is good
