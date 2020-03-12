@@ -264,7 +264,7 @@ static inline MultiPoint Solve(MultiPoint dataset, Factor k)
 
 // Driver code
 template <typename MultiPoint, typename Factor>
-inline void ConcaveHullKNN(MultiPoint input, MultiPoint& hull, Factor k)
+inline void ConcaveHullKNN(MultiPoint input, MultiPoint& hull, Factor& k)
 {
     typedef typename boost::range_size<MultiPoint>::type size_type;
 
