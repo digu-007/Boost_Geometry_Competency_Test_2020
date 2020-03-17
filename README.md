@@ -12,14 +12,27 @@ This programming competency test is for Project 1, implement algorithms for the 
 You can check the file address using command `pwd` in linux or`cd` in windows (You can use relative file address as well).
 
 ## Gift Wrapping Convex Hull
-This is the brute force method to find the convex hull of a set of points, in complexity O(n<sup>2</sup>). In this algorithm we check all the points in the current dataset and finds the one which makes the biggest counter-clockwise turn with the last edge, so every point added contends with all other non-convex hull points, making it a slower process for finding convex hull.This header supports MultiPoint concept of boost geometry as specified in test.
+This is the brute force method to find the convex hull of a set of points, in complexity O(n * h), where n is the number of points in the intial dataset and h is the number of points in the convex hull. In this algorithm we check all the points in the current dataset and finds the one which makes the biggest counter-clockwise turn with the last edge, so every point added contends with all other non-convex hull points, making it a slower process for finding convex hull. This header supports MultiPoint concept of boost geometry as specified in test.
 
 ### Performance
-For 100000 random points, execution time was about `752ms`.
+For 100,000 random points, execution time was about `752ms`.
 
-For 50000 random points, execution time was about `359ms`.
+For 50,000 random points, execution time was about `359ms`.
 
-For 10000 random points, execution time was about `63ms`.
+For 10,000 random points, execution time was about `63ms`.
+
+When I compared this algorithm with the one implemented in boost geometry I found that gift wrapping is on average **25% slower**. But for cases where all the points in the initial dataset are a part of convex hull, in such cases this algorithm is very slow. On the other hand when the concave hull had only 4-5 points, then the performance of gift wrapping was atleast twice better than the boost geometry one. But in general, I don't think so if there are benefits in implementing this algorithm for boost geometry.
+
+The main problem of the code is that we need to iterate over all the points to find the current vertex of convex hull using cross product. Here is bottleneck code:
+```cpp
+for (size_type i = 0; i < n; ++i)
+{
+    if (check(input[p], input[i], input[q])) // this function checks orientation of the three points.
+    {
+        q = i;
+    }
+}
+```
 
 Tests were carried out in Ubuntu 18.04.1, with gcc version 7.4.0 and optimization level `O2`.
 
@@ -30,7 +43,7 @@ Since my project is related to concave hull so I implemented a concave hull algo
 
 2. If there are clusters of points which are very far away from each other, then small `k` would lead to concave hull with points of only one cluster and others would remain outside the polygon. If this condition occurs we can simply call the same algorithm for `k = k + 1` and carry on this process until we get all the points inside concave hull.
 
-Naive implementation of this algorithm is of complexity O(n<sup>3</sup>) as written in many of the papers, but after using boost geometry's **R-Tree** for k-NN and most importantly **intersection queries**, I achieved the final complexity of **O(n<sup>2</sup> log n)**. Here is the exact code for interesection query:
+Naive implementation of this algorithm is of complexity O(d * n<sup>3</sup>) where n is the total number of points in the initial dataset and d is the change in the value of k. After using boost geometry's **R-Tree** for k-NN and most importantly **intersection queries**, I achieved the final complexity of **O(d * n<sup>2</sup> log n)**. Here is the exact code for intersection query:
 ```cpp
 std::vector<segment_type> bad;
 segment_type seg(k_nearest[i], cur_point);
@@ -57,11 +70,12 @@ Here is another example showing convex hull for `154` points in the shape of let
 As we can see if the k decreases concave hull becomes more 'sharper'. When k is equal to total points, then we get convex hull as the concave hull solution.
 
 ### Performance
+For 500 random points and `k = 50`, execution time was about `3123ms` for optimized version and `9890ms` for basic version. Here k was incremented to `k = 82` for valid concave hull.
 
-For 200 random points and `k = 3`, execution time was about `221ms` for optimized version and `501ms` for basic version. Here k was incremented to `k = 14` for valid concave hull.
+For 500 random points and `k = 30`, execution time was about `873ms` for optimized version and `2082ms` for basic version. Here k was incremented to `k = 39` for valid concave hull.
 
-For 100 random points and `k = 3`, execution time was about `1122ms` for optimized version and `2474ms` for basic version. Here k was incremented to `k = 44` for valid concave hull.
+For 200 random points and `k = 10`, execution time was about `87ms` for optimized version and `368ms` for basic version. Here k was incremented to `k = 14` for valid concave hull.
 
-For 100 random points and `k = 12`, execution time was about `58ms` for optimized version and `145ms` for basic version. Here k was incremented to `k = 15` for valid concave hull.
+For 100 random points and `k = 3`, execution time was about `94ms` for optimized version and `389ms` for basic version. Here k was incremented to `k = 16` for valid concave hull.
 
-As we can see this algorithm is simple but not that efficient for real use. For that I will also implement the `χ-shape` concave hull algorithm in the GSoC period, if my proposal gets accepted.
+As we can see this algorithm is simple but not that efficient for real use.
