@@ -78,4 +78,42 @@ For 200 random points and `k = 10`, execution time was about `87ms` for optimize
 
 For 100 random points and `k = 3`, execution time was about `94ms` for optimized version and `389ms` for basic version. Here k was incremented to `k = 16` for valid concave hull.
 
+There are many bottlenecks in this algorithm. One major issue with this algorithm is that we need to check if the next edge formed does not intersect the concave hull. Here is the code:
+```cpp
+for (size_type i = 0; i < size1; ++i)
+{   
+    bool ok = true;
+    linestring_type ls1{k_nearest[i], cur_point};
+
+    // querying RTree to find all the intersecting edges of the hull with the current edge
+    std::vector<segment_type> bad;
+    segment_type seg(k_nearest[i], cur_point);
+    rt2.query(bgi::intersects(seg), std::back_inserter(bad));
+
+    size_type size2 = boost::size(bad);
+    if (size2 == 1 and bg::equals(k_nearest[i], ans[0]))
+    {   
+        // if linestring touches first edge, then its the last edge and is ok
+        linestring_type ls2{ans[0], ans[1]};
+        if (!bg::touches(ls1, ls2))
+        {   
+            // if this linestring does not touch and only intersect then discard this point
+            ok = false;
+        }
+    }
+    else if (size2 > 0)
+    {   
+        // interesections means point is discarded
+        ok = false;
+    }
+
+    if (ok)
+    {   
+        // non intersecting edge is good
+        good.push_back(k_nearest[i]);
+    }
+}
+```
+Also every point needs to pass the point-in-poygon check at the end of the function and if any point fails the test, then function is called again for higher k value. This makes the program further slower.
+
 As we can see this algorithm is simple but not that efficient for real use.
