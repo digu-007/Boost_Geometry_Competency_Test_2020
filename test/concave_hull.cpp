@@ -15,7 +15,6 @@
 #include <boost/geometry/geometry.hpp>
 
 #include "../includes/concave_hull_k_nearest_neighbours_optimized.hpp"
-#include "../includes/concave_hull_k_nearest_neighbours.hpp"
 
 namespace bg = boost::geometry;
 using bg::dsv;
@@ -88,7 +87,7 @@ int main()
         freopen("output.txt", "w", stdout);
     #endif
 
-    for (int tt = 1; tt <= 10; ++tt)
+    for (int tt = 1; tt <= 50; ++tt) // 50 random test cases
     {
         mpoint_t mpt1, hull1, hull2;
 
@@ -99,9 +98,6 @@ int main()
             int y = my_rand(0, 100);
             bg::append(mpt1, point_t(x, y));
         }
-
-        algo2::ConcaveHullKNN(mpt1, hull1, k);
-        assert(test(mpt1, hull1) == true);
 
         algo3::ConcaveHullKNN(mpt1, hull2, k);
         assert(test(mpt1, hull2) == true);
